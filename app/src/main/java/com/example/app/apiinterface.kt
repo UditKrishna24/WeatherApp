@@ -14,7 +14,7 @@ interface apiinterface {
         @Query("units") units: String
     ): Call<weatherapp>
 
-    // Weather by coordinates (used in GPS-based fetch)
+    // Weather by coordinates (ugit branch -M mainsed in GPS-based fetch)
     @GET("weather")
     fun getWeatherDataByCoord(
         @Query("lat") lat: Double,
