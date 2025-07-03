@@ -8,6 +8,8 @@
     android:background="@drawable/sunnny_pic"
     tools:context=".MainActivity">
 
+
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
@@ -15,7 +17,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="24dp"
-        android:iconifiedByDefault="false"
+        android:iconifiedByDefault="true"
         android:queryHint="Search for a city"
         android:background="@drawable/searchviewshape"
         app:layout_constraintTop_toTopOf="parent"
@@ -369,25 +371,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:fontFamily="@font/merriweathersans_regular"
-        android:text="Design By\nUdit Krishna"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+
+
     <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/merriweathersans_regular"
         android:text="Design By\nUdit Krishna"
@@ -395,8 +384,7 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <View

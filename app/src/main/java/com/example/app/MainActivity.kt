@@ -2,10 +2,12 @@ package com.example.app
 
 import android.Manifest
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
@@ -15,6 +17,7 @@ import android.os.Looper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -67,6 +70,34 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         alreadyFetched = false
         checkLocationAndFetch()
+    }
+
+    private val gpsSwitchStateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val action = intent?.action
+            if (action == LocationManager.PROVIDERS_CHANGED_ACTION || action == Intent.ACTION_PROVIDER_CHANGED) {
+                val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        alreadyFetched = false
+                        checkLocationAndFetch()
+                    }, 2000)
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val filter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
+        filter.addAction(Intent.ACTION_PROVIDER_CHANGED)
+        registerReceiver(gpsSwitchStateReceiver, filter)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(gpsSwitchStateReceiver)
     }
 
     private fun checkLocationAndFetch() {
@@ -161,17 +192,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSearchBarStyle() {
+        binding.searchView.queryHint = "Search for a city"
         val searchEditText = binding.searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
         searchEditText.setHintTextColor(Color.GRAY)
         searchEditText.setTextColor(Color.BLACK)
         searchEditText.textSize = 16f
 
-        binding.searchView.setOnClickListener {
-            binding.searchView.isIconified = false
-            searchEditText.requestFocus()
-            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT)
-        }
+        val closeButton = binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        closeButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel)
+
+        binding.searchView.setIconifiedByDefault(false)
+        binding.searchView.isIconified = false
+        binding.searchView.clearFocus()
     }
 
     private fun searchCity() {
@@ -275,10 +307,6 @@ class MainActivity : AppCompatActivity() {
             "Snow", "Light Snow", "Heavy Snow", "Blizzard" -> resources.getDrawable(R.drawable.snow_background, null)
             else -> resources.getDrawable(R.drawable.mainwallpaper, null)
         }
-
-        val bitmap = (drawable as BitmapDrawable).bitmap
-        val blurred = BitmapBlurUtil.blur(this, bitmap)
-        binding.root.background = blurred.toDrawable(resources)
 
         val animation = when (condition) {
             "Clear", "Sunny", "Clear Sky" -> R.raw.sunnyjson
