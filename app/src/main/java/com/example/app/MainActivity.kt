@@ -300,23 +300,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeImage(condition: String) {
-        val drawable: Drawable = when (condition) {
-            "Clear", "Sunny", "Clear Sky" -> resources.getDrawable(R.drawable.sunny_background, null)
-            "Clouds", "Partly Clouds", "Mist", "Foggy" -> resources.getDrawable(R.drawable.cloudypic, null)
-            "Rain", "Light Rain", "Heavy Rain", "Drizzle" -> resources.getDrawable(R.drawable.rain_background, null)
-            "Snow", "Light Snow", "Heavy Snow", "Blizzard" -> resources.getDrawable(R.drawable.snow_background, null)
-            else -> resources.getDrawable(R.drawable.mainwallpaper, null)
+        when (condition) {
+            "Clear", "Sunny", "Clear Sky" -> {
+                binding.root.setBackgroundResource(R.drawable.sunny_background)
+                binding.lottieAnimationView.setAnimation(R.raw.sunnyjson)
+            }
+            "Clouds", "Partly Clouds", "Mist", "Foggy" -> {
+                binding.root.setBackgroundResource(R.drawable.cloudypic)
+                binding.lottieAnimationView.setAnimation(R.raw.cloudyjson)
+            }
+            "Rain", "Light Rain", "Heavy Rain", "Drizzle" -> {
+                binding.root.setBackgroundResource(R.drawable.rain_background)
+                binding.lottieAnimationView.setAnimation(R.raw.rainyjson)
+            }
+            "Snow", "Light Snow", "Heavy Snow", "Blizzard" -> {
+                binding.root.setBackgroundResource(R.drawable.snow_background)
+                binding.lottieAnimationView.setAnimation(R.raw.snowjson)
+            }
+            else -> {
+                binding.root.setBackgroundResource(R.drawable.mainwallpaper)
+                binding.lottieAnimationView.setAnimation(R.raw.sunnyjson)
+            }
         }
-
-        val animation = when (condition) {
-            "Clear", "Sunny", "Clear Sky" -> R.raw.sunnyjson
-            "Clouds", "Partly Clouds", "Mist", "Foggy" -> R.raw.cloudyjson
-            "Rain", "Light Rain", "Heavy Rain", "Drizzle" -> R.raw.rainyjson
-            "Snow", "Light Snow", "Heavy Snow", "Blizzard" -> R.raw.snowjson
-            else -> R.raw.sunnyjson
-        }
-
-        binding.lottieAnimationView.setAnimation(animation)
     }
 
     private fun time(timestamp: Long): String {
